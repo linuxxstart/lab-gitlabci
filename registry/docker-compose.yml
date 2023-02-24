@@ -1,0 +1,52 @@
+version: '3.7'
+
+services:
+  imagens:
+    image: registry:2
+    deploy:
+      endpoint_mode: dnsrr
+      placement:
+        constraints: [node.role ==  manager]
+      resources:
+        limits:
+          cpus: '0.20'
+          memory: 256M
+        reservations:
+          cpus: '0.15'
+          memory: 200M
+    environment:
+      - "TZ=America/Sao_Paulo"
+      - REGISTRY_STORAGE_DELETE_ENABLED=true
+#    ports:
+#    - "5000:5000"
+# Volume para manter as imagens no nfs   
+#    volumes:
+#      - /docker/imagens/:/var/lib/registry
+    networks:
+      - haproxy
+ 
+  browser:
+    image: klausmeyer/docker-registry-browser:latest
+    deploy:
+      endpoint_mode: dnsrr
+      resources:
+        limits:
+          cpus: '0.20'
+          memory: 256M
+        reservations:
+          cpus: '0.15'
+          memory: 200M
+    environment:
+      - 'DOCKER_REGISTRY_URL=http://imagens:5000'
+      - ENABLE_DELETE_IMAGES=true
+      - NO_SSL_VERIFICATION=true
+#    ports:
+#      - '8080:8080'
+    networks:
+      - haproxy
+  
+
+networks:
+  haproxy:
+    external: true
+    name: rede_proxy

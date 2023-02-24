@@ -1,0 +1,13 @@
+version: "3.7"
+services:
+  app:
+    image: imagens.labci.br/app:1.0.0
+    deploy:
+      endpoint_mode: dnsrr
+    networks:
+      - rede_proxy
+
+networks:
+  rede_proxy:
+    external: true
+    name: rede_proxy

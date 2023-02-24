@@ -1,0 +1,68 @@
+version: '3.7'
+services:
+  gitlab:
+    #image: 'gitlab/gitlab-ce:latest'
+    image: 'yrzr/gitlab-ce-arm64v8:latest'
+    hostname: 'git.labci.br'
+    deploy:
+      endpoint_mode: dnsrr
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://git.labci.br:80'
+        gitlab_rails['gitlab_shell_ssh_port'] = 2224
+        registry_external_url 'http://imagens.labci.br'
+        registry['enable'] = true
+#    ports:
+#      - '8081:80'
+#      - '2224:22'
+#      - '5000:5000'
+    networks:
+      - rede_proxy
+## NFS
+    #volumes:
+      #- /docker/gitlab/data:/var/opt/gitlab
+      #- /docker/gitlab/logs:/var/log/gitlab
+      #- /docker/gitlab/config:/etc/gitlab
+      #- gitdata:/var/opt/gitlab
+      #- gitlogs:/var/log/gitlab
+      #- gitconfig:/etc/gitlab
+  
+  gitlab-runner:
+    image: gitlab/gitlab-runner:latest
+    hostname: gitlab-runner
+    volumes:
+      - 'gitlab-runner-config:/etc/gitlab-runner:Z'
+      - '/var/run/docker.sock:/var/run/docker.sock'
+    networks:
+      - rede_proxy
+  
+volumes:
+  #gitdata:
+  #gitlogs:
+  #gitconfig:
+  gitlab-runner-config:  
+  
+
+networks:
+  rede_proxy:
+    external: true
+    name: rede_proxy
+
+## gitlab-runner-register.sh
+##!/bin/sh
+## Get the registration token from:
+## http://localhost:8080/root/${project}/settings/ci_cd
+#
+#registration_token=XXXXXXXXXXXXXXXXX
+#
+#docker exec -it gitlab-runner1 \
+#  gitlab-runner register \
+#    --non-interactive \
+#    --registration-token ${registration_token} \
+#    --locked=false \
+#    --description docker-stable \
+#    --url http://gitlab-web \
+#    --executor docker \
+#    --docker-image docker:stable \
+#    --docker-volumes "/var/run/docker.sock:/var/run/docker.sock" \
+#    --docker-network-mode gitlab-network
