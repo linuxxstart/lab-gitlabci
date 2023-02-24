@@ -71,5 +71,5 @@ Depois de acessar o gitlab e pegar o token, editar o script gitlab-runner-regist
 ```
 
 
-[<img src="https://i9.ytimg.com/vi/QExBnuOb2SM/maxresdefault.jpg" width="50%">](https://www.youtube.com/watch?v=QExBnuOb2SM "Gitlab CI/CD")
+[<img src="https://i9.ytimg.com/vi/QExBnuOb2SM/maxresdefault.jpg?v=63e6573a&sqp=CPDW4p8G&rs=AOn4CLCTR6nG295K4SMMGqxL0g8yGSjDyw" width="50%">](https://www.youtube.com/watch?v=QExBnuOb2SM "Gitlab CI/CD")
 
